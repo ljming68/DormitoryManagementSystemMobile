@@ -29,24 +29,27 @@ export default {
             console.log('提交登录信息')
             
             // sessionStorage.setItem('username','管理员')
-            this.$router.push('/home')
+            // this.$router.push('/home')
             
 
             let response = await this.$axios({
-                method: 'get',
+                method: 'post',
                 url: 'http://localhost:8091/user/login',
-                params: {
+                data: {
                 userName: this.username,
                 passWord: this.password
                 }
             })
-            console.log(response)
+
+            
+            
             console.log('取到返回信息')
+            console.log(response)
             if (response.data.code === '1000') {
-                
+                console.log('登录成功')
                 const { userName, role, trueName, schoolId, roomId, phoneNumber, id, checkTime, buildId, updateTime, deleteTime } = response.data
                 // sessionStorage.setItem('token', this.username)
-                // sessionStorage.setItem('role', response.data.role)
+                sessionStorage.setItem('role', response.data.role)
                 this.$store.state.userinfo.userName = userName
                 this.$store.state.userinfo.role = role
                 this.$store.state.userinfo.trueName = trueName
@@ -58,7 +61,7 @@ export default {
                 this.$store.state.userinfo.buildId = buildId
                 this.$store.state.userinfo.updateTime = updateTime
                 this.$store.state.userinfo.deleteTime = deleteTime
-                console.log(sessionStorage.getItem('store'))
+                // console.log(sessionStorage.getItem('store'))
                 this.$router.push('/home')
             } else {
                Toast({
@@ -79,7 +82,7 @@ export default {
 
 <style lang="css">
     .loginbox{background: rgb(178, 180, 182);flex: 1;}
-    .logintop{width: 100%; height:130px; font-size: 25px ;text-align: center;background: chartreuse;line-height:130px ;}
+    .logintop{width: 100%; height:260px; font-size: 30px ;text-align: center;background: chartreuse;line-height:260px ;}
     .loginbox{height:30% ;}
     
     

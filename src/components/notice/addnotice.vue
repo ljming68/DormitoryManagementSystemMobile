@@ -38,8 +38,9 @@
             
        </div>
        <div class="btnfooter">
-        <mt-button type="primary" size="large" @click="addnotice">确定</mt-button>
+       
         <mt-button type="danger" size="large" @click="cancelnotice">取消</mt-button>
+         <mt-button type="primary" size="large" @click="addnotice">确定</mt-button>
        </div>
       
    </div>
