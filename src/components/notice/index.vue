@@ -9,8 +9,8 @@
             <div class="notelist">
               
                 <ul>
-                      <router-link class="li1" to="/notice/noticedetail" tag="li" v-for="(item,index) in notice" :key="index">
-                     {{item.date}} {{item.title}} {{item.content}}
+                      <router-link class="li1" :to="{name:'noticedetail',query:{id:item.id}}" tag="li" v-for="item in notice" :key="item.id">
+                     {{item.noticeTime}} {{item.noticeName}} {{item.noticeContent}}
                         
                       
                       
@@ -33,31 +33,34 @@ export default {
         return {
             // show:''
             
-            notice:[{
-                date:'2021-07-15',
-                title:'测试1',
-                content:'文本文本文文本文本文本文文本本文',        
+            // notice:[{
+            //     date:'2021-07-15',
+            //     title:'测试1',
+            //     content:'文本文本文文本文本文本文文本本文',        
 
-            },
-            {
-                date:'2021-07-14',
-                title:'测试2',
-                content:'  这里我只说我用到的方式，Chrome移动端想要用::-webkit-scrollbar{width:0px}的样式隐藏右侧默认滚动条。需要设置html,body的width和height',        
+            // },
+            // {
+            //     date:'2021-07-14',
+            //     title:'测试2',
+            //     content:'  这里我只说我用到的方式，Chrome移动端想要用::-webkit-scrollbar{width:0px}的样式隐藏右侧默认滚动条。需要设置html,body的width和height',        
 
-            },
-            {
-                date:'2021-07-14',
-                title:'测试3',
-                content:'这样会导致document.body.scrollTop，window.pageYOffset的滚动条滚动距离获取会失效。我会在之后发表一篇解决办法。', 
-            },
-            {
-                date:'2021-07-14',
-                title:'测试3',
-                content:'这样会导致document.body.scrollTop，window.pageYOffset的滚动条滚动距离获取会失效。我会在之后发表一篇解决办法。', 
-            },
+            // },
+            // {
+            //     date:'2021-07-14',
+            //     title:'测试3',
+            //     content:'这样会导致document.body.scrollTop，window.pageYOffset的滚动条滚动距离获取会失效。我会在之后发表一篇解决办法。', 
+            // },
+            // {
+            //     date:'2021-07-14',
+            //     title:'测试3',
+            //     content:'这样会导致document.body.scrollTop，window.pageYOffset的滚动条滚动距离获取会失效。我会在之后发表一篇解决办法。', 
+            // },
             
             
-            ]
+            // ]
+
+            notice:[],
+
 
 
         }
@@ -89,7 +92,7 @@ export default {
                 method: 'get',
                 url: 'http://localhost:8091/notice/getAllNotices',
                 params: {
-                schoolId: this.$store.state.userinfo.schoolId
+                schoolId: this.schoolId
                 }
             })
             console.log("取到公告信息")
@@ -106,7 +109,7 @@ export default {
             //     res.data.notice[k]['trueName'] = trueName
             //     res.data.notice[k]['role'] = (Number(role) === 0 ? `系统管理员` : role === 1 ? `宿舍管理员` : `学生`)
             // }
-            // this.notice = res.data.notice
+            this.notice = res.data.notice
         },
         
 

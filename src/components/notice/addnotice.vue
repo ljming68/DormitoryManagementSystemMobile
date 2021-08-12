@@ -15,16 +15,16 @@
                 </mt-field>
            </div>
 
-           <div class="contentBottom">
+           <div class="contentmiddle">
                
                 <div class="leftspan">
-                    <span >可选范围</span>
+                    <span >宿舍楼号</span>
                 </div>
                 <div class="rightselect">
-                    <select name="" id="">
-                    <option  disabled selected>请选择</option>
-                    <option value="">N1</option>
-                    <option value="">N2</option>
+                    <select name="" id="" v-model="buildId">
+                    <option  disabled selected value="">请选择</option>
+                    <option :value="item" v-for="(item,index) in buildIds" :key="index">{{item.buildId}}</option>
+                   
                 </select>
                 </div> 
                    
@@ -37,10 +37,11 @@
            
             
        </div>
+
        <div class="btnfooter">
        
         <mt-button type="danger" size="large" @click="cancelnotice">取消</mt-button>
-         <mt-button type="primary" size="large" @click="addnotice">确定</mt-button>
+         <mt-button type="primary" size="large" @click="handleAddnotice">确定</mt-button>
        </div>
       
    </div>
@@ -49,34 +50,89 @@
 
 <script>
 import Vue from 'vue';
-import { Field, Button,Header } from 'mint-ui'; 
-Vue.use(Field, Button,Header);
+import { Field, Button,Header, Toast } from 'mint-ui'; 
+Vue.use(Field, Button,Header, Toast);
 export default {
    
     data(){
         return{
+          
            noticeName:'',
            noticeContent:'',
            value:'',
+            buildId:'',
+
+           buildIds:[]
 
         }
     },
-    created(){
-        
+    computed:{
+        dateNow() {
+             var date =new Date();
+             return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+
+    }
     },
 
     methods:{
-        addnotice(){
-            console.log('发布成功')
-            this.$router.go(-1)
+        async handleMounted(){
+            let res = await this.$axios({
+                method:'get',
+                url:'http://localhost:8091/build/getAllBuildId',
+            })
+            // console.log(res)
+            this.buildIds = res.data.allBuildId
+            console.log(this.buildIds)
         },
+
+        async handleAddnotice(){
+            let schoolId = this.$store.state.userinfo.schoolId
+            console.log(schoolId)
+            let res = await this.$axios({
+                method:'post',
+                url:'http://localhost:8091/notice/addNotice',
+                params:{
+                    schoolId:schoolId,
+                    noticeName:this.noticeName,
+                    noticeForBuildId:this.buildId,
+                    noticeContent:this.noticeContent.replace(/\s/g, '<br/>'),
+                    noticeTime:this.dateNow,
+
+                }
+            })
+            console.log(res)
+            if(res.data===1){
+                    console.log('添加成功')
+                    Toast({
+                        message: '添加成功',
+                        position: 'center',
+                        duration: 2000,
+                        iconClass: 'iconfont icon-caozuochenggong1'
+                    });
+                    this.$router.go(-1)
+                }else{
+
+                }
+           
+            
+
+          
+        },
+
+        
 
         cancelnotice(){
             console.log('取消发布')
-            this.$router.go(-1)
+            // this.$router.go(-1)
         },
 
-    }
+    },
+
+    mounted(){
+        console.log(this)
+        console.log(this.dateNow)
+        this.handleMounted()
+    },
 }
 </script>
 
@@ -88,9 +144,9 @@ export default {
     select{height:30px;width: 100px;font-size:16px;}
     option{font-size:16px;}
    
-    .contentBottom{height: 48px;padding: 0 10px;display: flex;background: #ffffff;font-size: 16px;border-bottom: 1px solid gainsboro;}
-    .contentBottom .leftspan{width: 105px;height: 48px;line-height: 48px;}
-    .contentBottom .rightselect{flex: 1; height: 48px;padding: 7px 0;}
+    .contentmiddle{height: 48px;padding: 0 10px;display: flex;background: #ffffff;font-size: 16px;border-bottom: 1px solid gainsboro;}
+    .contentmiddle .leftspan{width: 105px;height: 48px;line-height: 48px;}
+    .contentmiddle .rightselect{flex: 1; height: 48px;padding: 7px 0;}
     
     .btnfooter{flex: 1;background: #ffffff;display: flex;padding:10px 0 ;}
 </style>
