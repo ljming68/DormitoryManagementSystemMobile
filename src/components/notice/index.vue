@@ -2,7 +2,7 @@
     <div class="main">
         <div class="noteContent">
             <div class="action" v-if="show">
-                <span class="noticeNum">总数：100条</span>
+                <span class="noticeNum">总数：{{notice.length}}条</span>
                 <mt-button type="danger"  @click="addNotice" style="width:100px;float: right; flex:1;">添加公告</mt-button>
             </div>
             <div style="height:10px;background:grey"></div>

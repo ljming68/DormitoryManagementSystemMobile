@@ -6,7 +6,7 @@
           
            <div class="date">{{ notice.noticeTime}}</div>
             <div class="noticetitle">{{ notice.noticeName}}</div>
-           <div class="content">{{ notice.noticeContent}}</div>
+           <div class="content" v-html="notice.noticeContent">{{ notice.noticeContent}}</div>
            <div class="footerData">
                <div class="role"> {{footerData.role}}</div>
                <div class="trueName">{{footerData.trueName}}</div>

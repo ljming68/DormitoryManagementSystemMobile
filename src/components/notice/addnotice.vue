@@ -23,7 +23,8 @@
                 <div class="rightselect">
                     <select name="" id="" v-model="buildId">
                     <option  disabled selected value="">请选择</option>
-                    <option :value="item" v-for="(item,index) in buildIds" :key="index">{{item.buildId}}</option>
+                    <option value="All">All</option>
+                    <option :value="item.buildId" v-for="(item,index) in buildIds" :key="index">{{item.buildId}}</option>
                    
                 </select>
                 </div> 
@@ -69,7 +70,7 @@ export default {
     computed:{
         dateNow() {
              var date =new Date();
-             return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+             return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
 
     }
     },
@@ -95,7 +96,8 @@ export default {
                     schoolId:schoolId,
                     noticeName:this.noticeName,
                     noticeForBuildId:this.buildId,
-                    noticeContent:this.noticeContent.replace(/\s/g, '<br/>'),
+                    // noticeContent:this.noticeContent.replace(/\s/g, '<br/>'),
+                    noticeContent:this.noticeContent,
                     noticeTime:this.dateNow,
 
                 }
@@ -122,8 +124,8 @@ export default {
         
 
         cancelnotice(){
-            console.log('取消发布')
-            // this.$router.go(-1)
+            // console.log('取消发布')
+            this.$router.go(-1)
         },
 
     },
