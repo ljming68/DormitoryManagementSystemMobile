@@ -26,8 +26,8 @@
 
 <script>
 import Vue from 'vue';
-import { Button } from 'mint-ui';
-Vue.use(Button);
+import { Button,Indicator } from 'mint-ui';
+Vue.use(Button,Indicator);
 export default {
     data(){
         return {
@@ -116,9 +116,27 @@ export default {
 
     },
 
+    created(){
+        
+        
+
+    },
+
 
     mounted(){
-        this.handleMounted()
+        Indicator.open('Loading...')
+        setTimeout(() =>{
+        this.handleMounted().then(()=>{
+            Indicator.close()
+        })
+        },1000);
+        
+      
+
+      
+       
+        
+       
     }
 }
 </script>
