@@ -42,13 +42,17 @@ export default {
                 console.log(res)
                 if(res.data===true){
                     console.log('删除成功')
-                    Toast({
+                    let instance = Toast({
                         message: '删除成功',
-                        position: 'center',
-                        duration: 2000,
-                        iconClass: 'iconfont icon-caozuochenggong1'
+                        position: 'top',
+                        // duration: 500,
+                        // iconClass: 'iconfont icon-caozuochenggong1'
                     });
+                    setTimeout(() => {
+                    instance.close();
                     this.$router.go(-1)
+                    }, 500);
+                    
                 }else{
 
                 }

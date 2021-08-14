@@ -26,60 +26,26 @@
                 <tr>
                     <th>姓名</th>
                     <th>工号</th>
-                    <th>手机号</th>
-                    <th>权限</th>
-                    <th>管理宿舍楼</th>
+                    <!-- <th>手机号</th> -->
+                    <th>身份</th>
+                    <th>操作</th>
+                    <!-- <th>管理宿舍楼</th> -->
 
                 </tr>
+
                 <tr>
                 <td>LJMing</td>
                 <td>18060001</td>
-                <td>18888888888</td>
-                <td>{{role}}</td>
-                <td>N1</td>
+               
+                <td>系统管理员</td>
+                 <!-- <td><div style="width:40px;height:20px;background:white;">详情</div></td> -->
+                 <td><mt-button type="primary">primary</mt-button></td>
+                 
+              
                 
                 </tr>
 
-                <tr>
-                <td>王雪山</td>
-                <td>18060001</td>
-                <td>18888888888</td>
-                <td>系统管理员</td>
-                <td>全体宿舍</td>
                 
-                </tr>
-                <tr>
-                <td>王雪山</td>
-                <td>18060001</td>
-                <td>18888888888</td>
-                <td>系统管理员</td>
-                <td>全体宿舍</td>
-                
-                </tr>
-                <tr>
-                <td>王雪山</td>
-                <td>18060001</td>
-                <td>18888888888</td>
-                <td>系统管理员</td>
-                <td>全体宿舍</td>
-                
-                </tr>
-                <tr>
-                <td>王雪山</td>
-                <td>18060001</td>
-                <td>18888888888</td>
-                <td>系统管理员</td>
-                <td>全体宿舍</td>
-                
-                </tr>
-                <tr>
-                <td>王雪山</td>
-                <td>18060001</td>
-                <td>18888888888</td>
-                <td>系统管理员</td>
-                <td>全体宿舍</td>
-                
-                </tr>
            
 
                 </table>
@@ -91,7 +57,9 @@
 </template>
 
 <script>
-
+import Vue from 'vue'
+import { Button } from 'mint-ui';
+Vue.use(Button);
 export default {
     data(){
         return{
@@ -99,6 +67,8 @@ export default {
             SystemAdminNumber:0,
             HouseparentNumber:0,
             // role:'',
+
+            displayinfo:[],
 
 
         }
@@ -109,10 +79,7 @@ export default {
         }
     },
   
-  mounted() {
-    this.handleMounted()
-    // console.log(this.allAdmin)
-  },
+  
 
     computed:{
         role(){
@@ -146,6 +113,12 @@ export default {
                 methods:'GET',
                 url:'http://localhost:8091/user/getAllAdmin'
             })
+            console.log(res)
+            this.displayinfo = res.data
+            console.log(this.displayinfo)
+
+
+
             // let response = await this.axios({
             //     method: 'get',
             //     url: 'http://localhost:8091/user/login',
@@ -153,9 +126,9 @@ export default {
                 
             // })
 
-            for(let i in res.data){
-                i.role===0?this.admin.push(i):this.housePartent.push(i)
-            }
+            // for(let i in res.data){
+            //     i.role===0?this.admin.push(i):this.housePartent.push(i)
+            // }
 
             // let result = await this.$axios({
             //     methods:'GET',
@@ -164,7 +137,13 @@ export default {
             //value  存在问题
             // result.data.allBuildId.forEach(item => this.buildings.push({ value: item.buildId, label: item.buildId }))
         },
-    }
+    },
+
+
+    mounted() {
+    this.handleMounted()
+    // console.log(this.allAdmin)
+    },
 }
 </script>
 
@@ -179,7 +158,7 @@ export default {
     .operationArea .showpartNumber span:nth-child(2){height: 41px;background:rgb(55, 55, 114);}
     .operationArea .Addbtn{flex: 1;background: #ffffff}
     
-    .line{height: 20px;font-weight: 900; background-color: rgb(54, 121, 54);}
+    .line{height: 40px;font-weight: 900;font-size: 20px;line-height: 40px; background-color: rgb(54, 121, 54);}
 
     .showtable{flex: 1;background: gray;}
     .showtable table{

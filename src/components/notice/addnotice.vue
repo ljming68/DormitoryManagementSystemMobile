@@ -105,13 +105,18 @@ export default {
             console.log(res)
             if(res.data===1){
                     console.log('添加成功')
-                    Toast({
+                    let instance = Toast({
                         message: '添加成功',
-                        position: 'center',
-                        duration: 2000,
-                        iconClass: 'iconfont icon-caozuochenggong1'
+                        position: 'top',
+                        // duration: 2000,
+                        // iconClass: 'iconfont icon-caozuochenggong1'
                     });
-                    this.$router.go(-1)
+                    setTimeout(()=>{
+                        instance.close()
+                         this.$router.go(-1)
+
+                    },500)
+                   
                 }else{
 
                 }
