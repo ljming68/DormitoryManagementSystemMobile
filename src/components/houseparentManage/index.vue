@@ -33,13 +33,19 @@
 
                 </tr>
 
-                <tr>
-                <td>LJMing</td>
-                <td>18060001</td>
+                <tr v-for="(i,index) in Trlist " :key="index">
+                    <td v-for="(item,index) in allAdmin[i]" :key="index">{{item}}
+                        
+                    </td>
+                    <!-- <td><button style="width:40px;height: 25px;background: #26A2FF;border-radius:5px ;" @click="viewDetail">详情</button></td> -->
+                    <td><router-link class="table_btn" :to="{name:'admindetail',query:{schoolId:allAdmin[i].schoolId}}" tag="button">详情</router-link></td>
+                 
+                    
+              
                
-                <td>系统管理员</td>
+                
                  <!-- <td><div style="width:40px;height:20px;background:white;">详情</div></td> -->
-                 <td><mt-button type="primary">primary</mt-button></td>
+                 <!-- <td><mt-button type="primary">primary</mt-button></td> -->
                  
               
                 
@@ -69,6 +75,8 @@ export default {
             // role:'',
 
             displayinfo:[],
+            Trlist:[],
+            
 
 
         }
@@ -88,16 +96,30 @@ export default {
            
         },
         allAdmin() {
-            let table = [...this.admin, ...this.houseParent]
+            let table = this.displayinfo
             for (let v of table) {
                 if (v.role === 0) {
-                v.trueRole = '系统管理员'
-                v.buildId = '全体宿舍'
-                } else if (v.role === 1) { v.trueRole = '宿舍管理员' }
+                v.role = '系统管理员'
+                // v.buildId = '全体宿舍'
+                } else if (v.role === 1) { v.role = '宿舍管理员' }
             }
             console.log(table)
             return table
-    },
+        },
+
+        // Trlist(){
+        //     let list=[]
+        //     let len = this.displayinfo
+        //      console.log(len)
+        //      console.log(len.length)
+        //     for(var i=0;i<len;i++){
+        //         list[i]=i
+        //     }
+        //     return list
+           
+        // }
+
+        
 
 
     }, 
@@ -108,13 +130,39 @@ export default {
             this.$router.push('/houseparentManage/addadmin')
         },
 
+        viewDetail(){
+
+            // this.$router.push("{name:'admindetail',query:{schoolId:001}}")
+        },
+
         async handleMounted(){
             let res= await this.$axios({
                 methods:'GET',
                 url:'http://localhost:8091/user/getAllAdmin'
             })
             console.log(res)
-            this.displayinfo = res.data
+            for(let i in res.data){
+                let item = res.data[i]
+                let addinfo = {}
+
+                addinfo['trueName'] = item.trueName
+                addinfo['schoolId'] = item.schoolId
+                addinfo['role'] = item.role
+                
+                this.displayinfo[i]=addinfo
+
+            }
+
+            let list = []
+            for(var i=0;i<this.displayinfo.length;i++){
+                list[i]=i
+            }
+            this.Trlist=list
+             console.log(this.Trlist)
+
+
+        
+            
             console.log(this.displayinfo)
 
 
@@ -142,7 +190,7 @@ export default {
 
     mounted() {
     this.handleMounted()
-    // console.log(this.allAdmin)
+    
     },
 }
 </script>
@@ -174,8 +222,17 @@ export default {
                 border: 1px solid blue;
                 height:35px;
                 text-align: center;
+
+
+                
                 
             
-            }
+    }
+    .showtable table td .table_btn{
+        width:40px;
+        height: 25px;
+        background: #26A2FF;
+        border-radius:5px ;
+    }
 
 </style>

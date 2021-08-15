@@ -11,7 +11,9 @@ const Noticedetail=()=>import('@/components/notice/noticedetail')
 const Noticeheader =() =>import('@/components/notice/header')
 const HouseparentManage =() =>import('@/components/houseparentManage/index')
 const Addadmin =() =>import('@/components/houseparentManage/addadmin')
+const Admindetail=()=>import('@/components/houseparentManage/admindetail')
 const Addadminheader =() =>import('@/components/houseparentManage/header')
+// const Admindetailheader =() =>import('@/components/houseparentManage/detailheader')
 const StudentManage =() =>import('@/components/studentManage/index')
 const Examineinfo =() =>import('@/components/examineinfo/index')
 const Personalinfo =() =>import('@/components/personalinfo/index')
@@ -118,6 +120,20 @@ export default new Router({
         default:Addadmin
         
       }
+    },
+
+    {
+      path: '/houseparentManage/admindetail',
+      name: 'admindetail',
+      components:{
+
+        // header:Admindetailheader,
+        
+        default:Admindetail
+       
+        
+      },
+     
     },
 
     {
