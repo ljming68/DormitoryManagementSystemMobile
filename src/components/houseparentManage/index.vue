@@ -3,15 +3,15 @@
        <div class="houseparentmanage">
            <div class="operationArea">
                <div class="showAllNumber">
-                   <div >总数：</div>
-                   <div >{{AllNumber}}</div>
+                   <div style="font-size:25px;font-weight:900;">总数：</div>
+                   <div style="font-size:25px;font-weight:900;">{{this.Trlist.length}}</div>
                </div>
                <div class="showpartNumber">
                 
                     <!-- <mt-button class="iconfont icon-wode" type="danger" size="large">系统管理员：{{SystemAdminNumber}}</mt-button>
                     <mt-button class="iconfont icon-wode" type="primary" size="large">宿舍管理员：{{ HouseparentNumber}}</mt-button> -->
-                    <span class="showSystemadminNumber">系统管理员：{{SystemAdminNumber}}</span>
-                    <span class="showHouseparentNumber">宿舍管理员：{{ HouseparentNumber}}</span>
+                    <span class="showSystemadminNumber">系统管理员：{{Count}}</span>
+                    <span class="showHouseparentNumber">宿舍管理员：{{ Count2}}</span>
                </div>
               
            </div>
@@ -64,18 +64,18 @@
 
 <script>
 import Vue from 'vue'
-import { Button } from 'mint-ui';
-Vue.use(Button);
+import { Button,Indicator } from 'mint-ui';
+Vue.use(Button,Indicator);
 export default {
     data(){
         return{
-            AllNumber:20,
-            SystemAdminNumber:0,
-            HouseparentNumber:0,
+            // AllNumber:,
+          
             // role:'',
 
             displayinfo:[],
             Trlist:[],
+            Count:'',
             
 
 
@@ -95,6 +95,14 @@ export default {
             return this.$store.state.userinfo.role
            
         },
+
+        Count2(){
+            let ret=Number(this.Trlist.length)-Number(this.Count)
+            console.log(ret)
+            return ret
+        },
+
+        
         allAdmin() {
             let table = this.displayinfo
             for (let v of table) {
@@ -103,9 +111,13 @@ export default {
                 // v.buildId = '全体宿舍'
                 } else if (v.role === 1) { v.role = '宿舍管理员' }
             }
-            console.log(table)
+            // console.log(table)
             return table
         },
+
+        
+
+
 
         // Trlist(){
         //     let list=[]
@@ -148,17 +160,25 @@ export default {
                 addinfo['trueName'] = item.trueName
                 addinfo['schoolId'] = item.schoolId
                 addinfo['role'] = item.role
+
+                
                 
                 this.displayinfo[i]=addinfo
 
             }
 
             let list = []
+            let count=0
             for(var i=0;i<this.displayinfo.length;i++){
                 list[i]=i
+                if(this.displayinfo[i].role===0){
+                    count+=1
+                }
             }
             this.Trlist=list
+            this.Count=count
              console.log(this.Trlist)
+              console.log(this.Count)
 
 
         
@@ -189,7 +209,14 @@ export default {
 
 
     mounted() {
-    this.handleMounted()
+   
+
+    Indicator.open('加载中')
+        setTimeout(() =>{
+        this.handleMounted().then(()=>{
+            Indicator.close()
+        })
+        },1000);
     
     },
 }
@@ -208,7 +235,7 @@ export default {
     
     .line{height: 40px;font-weight: 900;font-size: 20px;line-height: 40px; background-color: rgb(54, 121, 54);}
 
-    .showtable{flex: 1;background: gray;}
+    .showtable{flex: 1;background: gray;overflow-y:scroll;}
     .showtable table{
     width: 100%;
     /* height:70%; */

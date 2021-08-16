@@ -3,31 +3,30 @@
        <div class="addadminContent">
            <mt-field label="用户名" placeholder="请输入用户名" v-model="username"></mt-field>
            <mt-field label="密码" placeholder="请输入密码" type="text" v-model="password"></mt-field>
-           <mt-field label="再次输入密码" placeholder="请输入密码" type="text" v-model="repassword"></mt-field>
+           <!-- <mt-field label="再次输入密码" placeholder="请输入密码" type="text" v-model="repassword"></mt-field> -->
            <mt-field label="学工号" placeholder="请输入学工号" v-model=" schoolId"></mt-field>
            <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="phone"></mt-field>
            <mt-field label="真实姓名" placeholder="请输入真实姓名" v-model="trueName"></mt-field>
 
-        <div class="selectContent">
+            
+
+        <div class="selectContent" v-if="show">
                
                 <div class="leftspan">
                     <span >管理楼号</span>
                 </div>
                 <div class="rightselect">
                     <select name="" id="" v-model="buildId" >
-                    <option  disabled selected >请选择</option>
-                   
-
-                    <option :value="item" v-for="(item,index) in buildings" :key="index">
-                        
-                        {{item}}
+                        <option  disabled selected value="">请选择</option>
+                
+                        <option :value="item" v-for="(item,index) in buildings" :key="index">
+                            
+                            {{item}}
                         </option>
-                </select>
-               
-
+                    </select>
                 </div> 
                    
-           </div>
+        </div>
 
             <mt-radio
                 
@@ -53,59 +52,98 @@
 
 <script>
 import Vue from 'vue';
-import { Field,Radio, MessageBox } from 'mint-ui';
-Vue.use(Field,Radio, MessageBox);
+import { Field,Radio, MessageBox,Picker } from 'mint-ui';
+Vue.use(Field,Radio, MessageBox,Picker);
 export default {
 
     data(){
         return{
             admin:[],
-            housePartent:[],
+            houseParent:[],
+
             username:null,
             password:null,
-            repassword:null,
             schoolId:null,
             phone:null,
             trueName:null,
             buildId:null,
              addRole:'',
+
+
+
+             
             role:this.$store.state.userinfo.role,
             // buildId:'',
             value:0,
            
 
-            buildings:["N1","N2","N3","N4"],
+            buildings:[],
             selected:'请选择',
             resAddSuccessCode:{data:{code:'1000',message:'添加成功'}},
             resAddErrorCode:{data:{code:'1001',message:'添加错误'}},
             resAddFailCode:{data:{code:'1001',message:'添加失败'}},
+
+
+
+        //    slots: [
+        //     {
+        //     flex: 1,
+        //     values: ['1', '2', '3', '4', '5', '6'],
+        //     className: 'slot1',
+        //     textAlign: 'center'
+        //     }, 
+        //     ]
+           
+
+
         }
     },
 
     computed:{
-        // allAdmin(){
-        //     let table = [...this.admin,...this.housePartent]
-        //     for (let i in table){
-        //         if(i.role===0){
-        //             i.trueRole='系统管理员'
-        //             i.buildId='全体宿舍'
-        //         }else if(i.role===1){
-        //             i.trueRole='宿舍管理员'
-        //         }
-        //     }
-        //     console.log(table)
-        //     return table
+       
 
-        // },
-
-        dataNow(){
-            return `${this.year}-${this.month}-${this.day}`
+        dateNow(){
+             var date =new Date();
+             return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
         },
         disabled(){
-            // return !(this.addPhoneNumber && this.addTrueName && this.addBuildId && this.addRole && this.addUsername && this.addPassword)
-            // return !(this.username && this.trueName && this.buildId && this.addRole && this.phone && this.password )
-            return !(this.username && this.password && this.repassword && this.schoolId && this.phone && this.trueName && this.buildId && this.addRole )
-        }
+            
+            // return !(this.username && this.password && this.repassword && this.schoolId && this.phone && this.trueName && this.buildId && this.addRole )
+
+            if(this.addRole=='系统管理员'){
+        
+                return !(this.username && this.password  && this.schoolId && this.phone && this.trueName  && this.addRole)
+            }else{
+                return !(this.username && this.password  && this.schoolId && this.phone && this.trueName && this.buildId && this.addRole)
+            }
+        },
+
+        show(){
+            if(this.addRole=='系统管理员'){
+                return false
+            }else{
+                return true
+            }
+
+        },
+
+        inputRole(){
+             if(this.addRole=='系统管理员'){
+                return 0
+            }else{
+                return 1
+            }
+        },
+
+        inputBuildId(){
+            if(this.addRole=='系统管理员'){
+                return "All"
+            }else{
+                return this.buildId
+            }
+        },
+
+        
     },
 
     methods:{
@@ -115,63 +153,77 @@ export default {
                 url:'http://localhost:8091/user/getAllAdmin'
             })
 
-            for(let i in res.data){
-                i.role===0?this.admin.push(i):this.housePartent.push(i)
+            // console.log(res)
+
+            for (let v of res.data) {
+                v.role === 0 ? this.admin.push(v) : this.houseParent.push(v)
             }
+
+            // console.log(this.admin)
+            // console.log(this.houseParent)
 
             let result = await this.$axios({
                 methods:'GET',
                 url:'http://localhost:8091/build/getAllBuildId'
             })
-            //value  存在问题
-            // result.data.allBuildId.forEach(item => this.buildings.push({ value: item.buildId, label: item.buildId }))
+
+            result.data.allBuildId.forEach(item => this.buildings.push(item.buildId,  ))
+           
         },
 
         async handleaddadmin(){
             
-            // const { schoolId, username, password, phone, trueName, addRole, buildId } = this.$data
-            // let res = await this.$axios({
-            //     methods:'GET',
-            //     url:'http://localhost:8091/user/addAdmin',
-            //     params:{
-            //         userName: username,
-            //         schoolId: schoolId,
-            //         passWord: password,
-            //         phoneNumber: phone,
-            //         trueName: trueName,
-            //         role: Number(addRole),
-            //         buildId: buildId,
-            //         checkTime: this.dateNow
-            //     }
-            // })
-            // let res = this.resAddSuccessCode
-            // let res = this.resAddErrorCode
-             let res = this.resAddFailCode
+            
+            const { schoolId, username, password, phone, trueName } = this.$data
+            console.log(schoolId, username, password, phone, trueName)
+            let res = await this.$axios({
+                methods:'GET',
+                url:'http://localhost:8091/user/addAdmin',
+                params:{
+                    userName: username,
+                    schoolId: schoolId,
+                    passWord: password,
+                    phoneNumber: phone,
+                    trueName: trueName,
+                    role: Number(this.inputRole),
+                    buildId: this.inputBuildId,
+                    checkTime: this.dateNow,
+                   
+                   
+                }
+            })
+
+       
+
+           
             console.log(res)
-            console.log('发送添加请求，取到返回值')
+            
             if (res.data.code==='1000'){
                 MessageBox({
                     title: '提示',
                     message: res.data.message,
                     // showCancelButton: true
                 }).then(action => {
+
                     this.$router.push('/houseparentManage')
+                    
+                    
                 });
             }else if(res.data.code==='1001') {
                 MessageBox({
                     title: '提示',
                     message: res.data.message,
-                    // showCancelButton: true
+                   
                 }).then(action => {
-                    // this.$router.push('/houseparentManage')
+                   
                 });
             }else{
                 MessageBox({
                     title: '提示',
                     message: res.data.message,
-                    // showCancelButton: true
+                    
                 }).then(action => {
-                    // this.$router.push('/houseparentManage')
+                   
                 });
             }
             
@@ -180,6 +232,12 @@ export default {
         canceladd(){
              this.$router.push('/houseparentManage')
         },
+
+        // onValuesChange(picker, values) {
+        //     if (values[0] > values[1]) {
+        //     picker.setSlotValue(1, values[0]);
+        //     }
+        // }
     },
 
     created(){
@@ -192,8 +250,9 @@ export default {
 
     mounted(){
         this.handleMonted()
-        console.log(this.allAdmin)
-        console.log('所有的管理者')
+        console.log(this)
+        // console.log(this.allAdmin)
+        // console.log('所有的管理者')
     }
     
 }
@@ -205,9 +264,14 @@ export default {
     select{height: 30px;width: 100px;font-size: 16px;}
      .selectContent{height:48px;padding: 0 10px;display: flex;background: #ffffff;font-size: 16px;border-bottom: 1px solid gainsboro;}
     .selectContent .leftspan{width: 105px;height: 48px;line-height: 48px;}
-    .selectContent .rightselect{flex: 1; height: 48px;padding: 8px 0;}
-
+     .selectContent .rightselect{
+        flex: 1; 
+        height: 48px;
+        padding: 8px 0;
+    } 
+    .picker-items{height: 60px;}
     .mint-radiolist-title{font-size: 16px;}
+    
 
     .addadminContent .btnfooter{flex: 1;background: #ffffff;display: flex;padding:50px 0 ;}
 </style>
