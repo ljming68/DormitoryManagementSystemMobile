@@ -14,7 +14,9 @@ const Addadmin =() =>import('@/components/houseparentManage/addadmin')
 const Admindetail=()=>import('@/components/houseparentManage/admindetail')
 const Addadminheader =() =>import('@/components/houseparentManage/header')
 // const Admindetailheader =() =>import('@/components/houseparentManage/detailheader')
+
 const StudentManage =() =>import('@/components/studentManage/index')
+const AddStudent=()=>import('@/components/studentManage/addstudent')
 const Examineinfo =() =>import('@/components/examineinfo/index')
 const Personalinfo =() =>import('@/components/personalinfo/index')
 const Login =() =>import('@/components/login/index')
@@ -143,6 +145,17 @@ export default new Router({
 
         header:Header,  //前面的header 要小写  router name =''
         default:StudentManage
+        
+      }
+    },
+
+    {
+      path: '/studentManage/addstudent',
+      name: 'addstudent',
+      components:{
+
+        header:Addadminheader,  //前面的header 要小写  router name =''
+        default:AddStudent
         
       }
     },
