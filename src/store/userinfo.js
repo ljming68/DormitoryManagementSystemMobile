@@ -20,7 +20,7 @@ export default{
         roomId:'',
         phoneNumber:'',
         checkTime:'',
-        buildId:'',
+        buildId:'N6',
         updateTime:'',
         deleteTime:'',
 

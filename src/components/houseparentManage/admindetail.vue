@@ -31,6 +31,7 @@
                 <mt-field label="工号" placeholder="不可修改" v-model=" admininfo.schoolId" :disabled="true">{{"不可修改"}}</mt-field>
                 <mt-field label="手机号" placeholder="请输入手机号" type="tel" v-model="admininfo.phoneNumber"></mt-field>
                 <mt-field label="真实姓名" placeholder="请输入真实姓名" v-model="admininfo.trueName"></mt-field>
+                
 
                 <div class="btnfooter">
                  <mt-button type="danger" size="large" @click="cancelChange">取消</mt-button>
